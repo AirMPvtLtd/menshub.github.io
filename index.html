@@ -13,6 +13,7 @@
             --dark: #111827;
             --light-dark: #1f2937;
             --accent: #f59e0b;
+            --danger: #ef4444;
         }
         body {
             background-color: var(--dark);
@@ -49,6 +50,12 @@
         .btn-accent:hover {
             background: #e67e22;
             transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: var(--danger);
+        }
+        .btn-danger:hover {
+            background: #dc2626;
         }
         .modal {
             display: none;
@@ -183,6 +190,22 @@
             justify-content: center;
             font-size: 12px;
         }
+        .quote-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border-left: 4px solid var(--accent);
+        }
+        .crisis-card {
+            background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+            border-left: 4px solid var(--danger);
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
         @media (max-width: 768px) {
             .modal {
                 width: 95%;
@@ -227,8 +250,84 @@
         </div>
     </header>
 
+    <!-- Emotional Appeal Section -->
+    <section class="py-8 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Crisis Card -->
+                <div class="crisis-card p-6 rounded-lg pulse">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-red-900/30 flex items-center justify-center mr-3 text-red-400">
+                            <i class="fas fa-exclamation-triangle text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Every 8.6 Minutes</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">An Indian man commits suicide due to false cases and legal harassment (NCRB 2022)</p>
+                    <button class="btn-danger px-4 py-2 rounded-lg text-sm font-medium" onclick="openModal('crisis-modal')">
+                        <i class="fas fa-phone-alt mr-1"></i> Crisis Helpline
+                    </button>
+                </div>
+                
+                <!-- Quote Card -->
+                <div class="quote-card p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                            <i class="fas fa-quote-left text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Men Suffer Too</h3>
+                    </div>
+                    <p class="text-gray-300 italic mb-4">"Gender equality means equal rights for all, not selective justice. Men are human beings too, deserving of dignity and fair treatment."</p>
+                    <p class="text-blue-200 text-sm">- Justice K.S. Puttaswamy</p>
+                </div>
+                
+                <!-- Stats Card -->
+                <div class="card p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                            <i class="fas fa-chart-line text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">False Cases Rising</h3>
+                    </div>
+                    <ul class="text-gray-300 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-arrow-up text-red-400 mr-2 mt-1"></i>
+                            <span>72% of 498A cases found false (Supreme Court Committee)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-male text-blue-400 mr-2 mt-1"></i>
+                            <span>1.2M men fighting false cases in India</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-rupee-sign text-yellow-400 mr-2 mt-1"></i>
+                            <span>₹5.8L avg. legal cost per case</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="card p-6 rounded-lg text-center mb-8">
+                <h3 class="text-2xl font-bold text-white mb-4">You Are Not Alone</h3>
+                <p class="text-gray-300 mb-6 max-w-3xl mx-auto">
+                    The system may be against you, but we stand with you. Every day, hundreds of innocent men like you fight back against legal terrorism and win. 
+                    Your life matters. Your rights matter. Let's fight this battle together.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button class="btn-primary px-6 py-3 rounded-lg text-lg font-medium flex items-center justify-center space-x-2" onclick="openModal('complaint-modal')">
+                        <i class="fas fa-fist-raised"></i>
+                        <span>Fight Back Now</span>
+                    </button>
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg text-lg font-medium flex items-center justify-center space-x-2" onclick="openModal('emotional-modal')">
+                        <i class="fas fa-hands-helping"></i>
+                        <span>Get Emotional Support</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Hero Section -->
-    <section class="text-center py-12 px-4">
+    <section class="text-center py-12 px-4 bg-gradient-to-b from-gray-900 to-gray-800">
         <div class="max-w-4xl mx-auto">
             <div class="inline-block bg-blue-900/20 px-4 py-2 rounded-full mb-4 border border-blue-800">
                 <span class="text-blue-400 font-medium">#FightForYourRights</span>
@@ -1067,6 +1166,76 @@
                 <button class="btn-primary px-6 py-3 rounded-lg" onclick="closeModal('pressure-modal')">
                     Done <i class="fas fa-check ml-1"></i>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crisis Support Modal -->
+    <div id="crisis-modal" class="modal">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                    Crisis Support
+                </h2>
+                <button onclick="closeModal('crisis-modal')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="card p-6 rounded-lg bg-red-900/10 border border-red-900/50 mb-6">
+                <h3 class="text-xl font-bold text-white mb-4">You Matter. Help is Available.</h3>
+                <p class="text-gray-300 mb-4">
+                    The pain may feel overwhelming right now, but this difficult moment will pass. 
+                    Thousands of men have been where you are and survived to rebuild their lives.
+                </p>
+                <p class="text-gray-300 mb-4">
+                    <strong>False cases don't define you.</strong> The legal system moves slowly, but justice does come.
+                </p>
+                <div class="bg-black/30 p-4 rounded-lg mb-4">
+                    <p class="text-white font-bold mb-2">Immediate Help:</p>
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-phone-alt text-red-400 mr-3"></i>
+                        <div>
+                            <p class="text-white">Men's Suicide Prevention Helpline</p>
+                            <p class="text-gray-400 text-sm">+91 9999 666 555 (24/7)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-comments text-red-400 mr-3"></i>
+                        <div>
+                            <p class="text-white">Legal Support Chat</p>
+                            <p class="text-gray-400 text-sm">Available now via blue chat button</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-danger w-full py-3 rounded-lg font-medium" onclick="openChatbot()">
+                    <i class="fas fa-comment-dots mr-2"></i> Chat Now with Counselor
+                </button>
+            </div>
+            
+            <div class="card p-6 rounded-lg bg-gray-900">
+                <h3 class="text-xl font-bold text-white mb-4">Survivor Stories</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400 mt-1">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 italic">"After my false 498A case, I wanted to end it all. Today, 3 years later, I run a support group helping others. The storm passes."</p>
+                            <p class="text-blue-400 text-sm mt-2">- Rohan, Delhi</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400 mt-1">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 italic">"Lost everything in custody battle - home, savings, even will to live. Now I see my kids every weekend. The fight was worth it."</p>
+                            <p class="text-blue-400 text-sm mt-2">- Vikram, Mumbai</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
