@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Men's JusticeHub - Fight False Cases ⚖️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --dark: #111827;
+            --light-dark: #1f2937;
+            --accent: #f59e0b;
+        }
+        body {
+            background-color: var(--dark);
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--light-dark) 100%);
+        }
+        .card {
+            background: var(--light-dark);
+            border: 1px solid #374151;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+        .btn-primary {
+            background: var(--primary);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: #000;
+        }
+        .btn-accent:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 16px;
+            background: var(--light-dark);
+            border: 1px solid #374151;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        .floating-btn {
+            position: fixed;
+            z-index: 1000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .floating-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+        }
+        .chatbot-btn {
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+        }
+        .story-btn {
+            bottom: 110px;
+            right: 30px;
+            background: var(--accent);
+            color: #000;
+        }
+        .progress-bar {
+            height: 6px;
+            background: #374151;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #111827;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid #374151;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .tab:hover:not(.active) {
+            border-bottom: 3px solid #374151;
+        }
+        .case-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .tag-498a {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .tag-dv {
+            background: rgba(249, 115, 22, 0.2);
+            color: #f97316;
+        }
+        .tag-custody {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .tag-rti {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        .success-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        @media (max-width: 768px) {
+            .modal {
+                width: 95%;
+            }
+            .floating-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            .chatbot-btn {
+                bottom: 20px;
+                right: 20px;
+            }
+            .story-btn {
+                bottom: 85px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col gradient-bg">
+    <!-- Header -->
+    <header class="bg-gray-900 p-4 flex justify-between items-center border-b border-gray-800 sticky top-0 z-10">
+        <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-gavel text-white"></i>
+            </div>
+            <h1 class="text-xl md:text-2xl font-bold text-white">Men's JusticeHub <span class="text-blue-400">⚖️</span></h1>
+        </div>
+        <div class="flex items-center space-x-3">
+            <div class="relative hidden md:block">
+                <input type="text" placeholder="Search cases..." class="bg-gray-800 text-white p-2 pl-10 rounded-lg border border-gray-700 w-48 focus:w-64 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <button class="btn-primary px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
+                <i class="fas fa-user-plus"></i>
+                <span class="hidden md:inline">Join Community</span>
+            </button>
+            <button class="bg-gray-800 p-2 rounded-lg md:hidden">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="text-center py-12 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block bg-blue-900/20 px-4 py-2 rounded-full mb-4 border border-blue-800">
+                <span class="text-blue-400 font-medium">#FightForYourRights</span>
+            </div>
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">Fight False Cases with <span class="text-blue-400">AI + Community</span> Power</h2>
+            <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">Get legal tools, case strategies, and emotional support to combat fake 498A, DV, and extortion cases.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+                <button class="btn-primary px-6 py-3 rounded-lg text-lg font-medium flex items-center justify-center space-x-2" onclick="openModal('complaint-modal')">
+                    <i class="fas fa-file-alt"></i>
+                    <span>File Counter Complaint</span>
+                </button>
+                <button class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg text-lg font-medium flex items-center justify-center space-x-2" onclick="openModal('strategy-modal')">
+                    <i class="fas fa-chess"></i>
+                    <span>Case Strategy</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-8 px-4">
+        <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="card p-6 text-center">
+                <div class="text-3xl font-bold text-blue-400 mb-2">1,250+</div>
+                <div class="text-gray-300">Cases Fought</div>
+            </div>
+            <div class="card p-6 text-center">
+                <div class="text-3xl font-bold text-blue-400 mb-2">78%</div>
+                <div class="text-gray-300">Success Rate</div>
+            </div>
+            <div class="card p-6 text-center">
+                <div class="text-3xl font-bold text-blue-400 mb-2">500+</div>
+                <div class="text-gray-300">Police Actions</div>
+            </div>
+            <div class="card p-6 text-center">
+                <div class="text-3xl font-bold text-blue-400 mb-2">24/7</div>
+                <div class="text-gray-300">Support Available</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto p-4 flex-1">
+        <!-- Features Grid -->
+        <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+            <i class="fas fa-tools mr-3 text-blue-400"></i>
+            Legal Defense Tools
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Feature 1 -->
+            <div class="card p-6 rounded-lg relative">
+                <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                    <i class="fas fa-file-invoice text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Counter FIR Drafting</h3>
+                <p class="text-gray-400 mb-4">AI-assisted drafting of counter complaints under IPC 182, CrPC 200 with relevant case laws.</p>
+                <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="openModal('complaint-modal')">
+                    Draft Now <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="card p-6 rounded-lg relative">
+                <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                    <i class="fas fa-chess-knight text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Case Strategy Builder</h3>
+                <p class="text-gray-400 mb-4">Personalized legal strategies based on your case details and similar precedents.</p>
+                <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="openModal('strategy-modal')">
+                    Build Strategy <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="card p-6 rounded-lg relative">
+                <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                    <i class="fas fa-bullhorn text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Police Pressure Tools</h3>
+                <p class="text-gray-400 mb-4">RTI templates, social media tagging guides, and complaint escalation pathways.</p>
+                <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="openModal('pressure-modal')">
+                    Get Tools <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="card p-6 rounded-lg relative">
+                <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                    <i class="fas fa-heart text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Emotional Support</h3>
+                <p class="text-gray-400 mb-4">Counseling sessions, stress management techniques, and peer support groups.</p>
+                <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="openModal('emotional-modal')">
+                    Get Support <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="card p-6 rounded-lg relative">
+                <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                    <i class="fas fa-money-bill-wave text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Extortion Defense</h3>
+                <p class="text-gray-400 mb-4">Documentation templates, negotiation scripts, and evidence preservation guides.</p>
+                <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="openModal('extortion-modal')">
+                    Fight Back <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="card p-6 rounded-lg relative">
+                <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                    <i class="fas fa-child text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Custody Solutions</h3>
+                <p class="text-gray-400 mb-4">Child custody guides, visitation templates, and maintenance calculators.</p>
+                <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="openModal('custody-modal')">
+                    Learn More <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Community Section -->
+        <div class="mb-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white flex items-center">
+                    <i class="fas fa-users mr-3 text-blue-400"></i>
+                    Community Hub
+                </h2>
+                <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium" onclick="openModal('post-modal')">
+                    <i class="fas fa-plus mr-1"></i> Share Your Story
+                </button>
+            </div>
+
+            <div class="card p-6 rounded-lg">
+                <!-- Tabs -->
+                <div class="flex border-b border-gray-700 mb-6">
+                    <div class="tab active" onclick="switchTab('all-posts')">All Posts</div>
+                    <div class="tab" onclick="switchTab('success-stories')">Success Stories</div>
+                    <div class="tab" onclick="switchTab('legal-advice')">Legal Advice</div>
+                    <div class="tab" onclick="switchTab('support')">Support</div>
+                </div>
+
+                <!-- Posts -->
+                <div id="all-posts" class="tab-content">
+                    <!-- Post 1 -->
+                    <div class="card p-5 rounded-lg mb-4 relative">
+                        <div class="flex items-start mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center mr-3">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center">
+                                    <span class="font-medium text-white">AnonymousUser_498A</span>
+                                    <span class="text-gray-500 text-sm ml-2">2 hours ago</span>
+                                </div>
+                                <div class="flex flex-wrap mt-1">
+                                    <span class="case-tag tag-498a">498A</span>
+                                    <span class="case-tag tag-rti">RTI</span>
+                                    <span class="case-tag">Delhi</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">Police ignored my counter complaint - what next?</h4>
+                        <p class="text-gray-400 mb-4">Filed counter FIR under IPC 182 with evidence but Rohini PS not taking action. Used JusticeHub's RTI tool but no response in 30 days. Any similar experiences?</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-4">
+                                <button class="text-gray-400 hover:text-white"><i class="far fa-thumbs-up mr-1"></i> 24</button>
+                                <button class="text-gray-400 hover:text-white"><i class="far fa-comment mr-1"></i> 8</button>
+                                <button class="text-gray-400 hover:text-white"><i class="fas fa-retweet mr-1"></i> Share</button>
+                            </div>
+                            <button class="text-blue-400 text-sm font-medium">View Details</button>
+                        </div>
+                    </div>
+
+                    <!-- Post 2 -->
+                    <div class="card p-5 rounded-lg mb-4 relative">
+                        <div class="success-badge">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="flex items-start mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center mr-3">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center">
+                                    <span class="font-medium text-white">Rahul_FightsBack</span>
+                                    <span class="text-gray-500 text-sm ml-2">1 day ago</span>
+                                </div>
+                                <div class="flex flex-wrap mt-1">
+                                    <span class="case-tag tag-dv">DV Case</span>
+                                    <span class="case-tag">Mumbai</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">Won my case after 2 years! Here's how...</h4>
+                        <p class="text-gray-400 mb-4">After using JusticeHub's strategy builder and community advice, got my false DV case quashed! Key was documenting all communications and filing RTIs on police inaction.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-4">
+                                <button class="text-gray-400 hover:text-white"><i class="far fa-thumbs-up mr-1"></i> 56</button>
+                                <button class="text-gray-400 hover:text-white"><i class="far fa-comment mr-1"></i> 22</button>
+                                <button class="text-gray-400 hover:text-white"><i class="fas fa-retweet mr-1"></i> Share</button>
+                            </div>
+                            <button class="text-blue-400 text-sm font-medium">View Details</button>
+                        </div>
+                    </div>
+
+                    <!-- Post 3 -->
+                    <div class="card p-5 rounded-lg relative">
+                        <div class="flex items-start mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center mr-3">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center">
+                                    <span class="font-medium text-white">LegalWarrior</span>
+                                    <span class="text-gray-500 text-sm ml-2">3 days ago</span>
+                                </div>
+                                <div class="flex flex-wrap mt-1">
+                                    <span class="case-tag tag-custody">Custody</span>
+                                    <span class="case-tag">Bangalore</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">How to get visitation rights when ex denies access?</h4>
+                        <p class="text-gray-400 mb-4">Ex-wife denying court-ordered visitation using false allegations. Filed contempt but process slow. Any practical tips to enforce rights faster?</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-4">
+                                <button class="text-gray-400 hover:text-white"><i class="far fa-thumbs-up mr-1"></i> 18</button>
+                                <button class="text-gray-400 hover:text-white"><i class="far fa-comment mr-1"></i> 12</button>
+                                <button class="text-gray-400 hover:text-white"><i class="fas fa-retweet mr-1"></i> Share</button>
+                            </div>
+                            <button class="text-blue-400 text-sm font-medium">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="success-stories" class="tab-content hidden">
+                    <!-- Success stories content -->
+                    <div class="text-center py-10">
+                        <i class="fas fa-trophy text-4xl text-yellow-400 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Success Stories</h3>
+                        <p class="text-gray-400 mb-6">Real wins from our community members</p>
+                        <button class="btn-primary px-4 py-2 rounded-lg" onclick="openModal('post-modal')">
+                            Share Your Success Story
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Other tab contents would go here -->
+            </div>
+        </div>
+
+        <!-- Case Reference Library -->
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                <i class="fas fa-book mr-3 text-blue-400"></i>
+                Case Reference Library
+            </h2>
+            <div class="card p-6 rounded-lg">
+                <div class="relative mb-6">
+                    <input type="text" placeholder="Search cases (e.g., 498A quashed, custody rights)" class="w-full bg-gray-800 text-white p-3 pl-10 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Case 1 -->
+                    <div class="card p-5 rounded-lg">
+                        <div class="flex flex-wrap mb-2">
+                            <span class="case-tag tag-498a">498A</span>
+                            <span class="case-tag">Supreme Court</span>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">Arnesh Kumar vs State of Bihar</h4>
+                        <p class="text-gray-400 text-sm mb-3">Guidelines against automatic arrests in 498A cases. Police must give notice before arrest.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-400 text-sm">2014 SCC 6 562</span>
+                            <button class="text-blue-400 text-sm font-medium">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Case 2 -->
+                    <div class="card p-5 rounded-lg">
+                        <div class="flex flex-wrap mb-2">
+                            <span class="case-tag tag-dv">DV Act</span>
+                            <span class="case-tag">Delhi HC</span>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">Rajesh Sharma vs State of UP</h4>
+                        <p class="text-gray-400 text-sm mb-3">Directions to prevent misuse of DV Act. Family Welfare Committees to be formed.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-400 text-sm">2017 SCC 9 748</span>
+                            <button class="text-blue-400 text-sm font-medium">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button class="btn-primary px-4 py-2 rounded-lg">
+                        View All Case References
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                <i class="fas fa-file-download mr-3 text-blue-400"></i>
+                Free Resources
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Resource 1 -->
+                <div class="card p-6 rounded-lg">
+                    <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                        <i class="fas fa-file-pdf text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Counter FIR Guide</h3>
+                    <p class="text-gray-400 mb-4">Step-by-step guide to filing counter complaints with sample formats.</p>
+                    <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                        Download <i class="fas fa-download ml-1"></i>
+                    </button>
+                </div>
+                
+                <!-- Resource 2 -->
+                <div class="card p-6 rounded-lg">
+                    <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                        <i class="fas fa-video text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Police Station Guide</h3>
+                    <p class="text-gray-400 mb-4">Video guide on how to handle police station visits and record statements.</p>
+                    <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                        Watch Now <i class="fas fa-play ml-1"></i>
+                    </button>
+                </div>
+                
+                <!-- Resource 3 -->
+                <div class="card p-6 rounded-lg">
+                    <div class="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                        <i class="fas fa-file-excel text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Maintenance Calculator</h3>
+                    <p class="text-gray-400 mb-4">Excel tool to calculate fair maintenance based on income and expenses.</p>
+                    <button class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                        Download <i class="fas fa-download ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- Complaint Filing Modal -->
+    <div id="complaint-modal" class="modal">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-file-alt text-blue-400 mr-2"></i>
+                    File Counter Complaint
+                </h2>
+                <button onclick="closeModal('complaint-modal')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="progress-bar mb-6">
+                <div class="progress-fill" id="complaint-progress" style="width: 20%"></div>
+            </div>
+            
+            <div id="complaint-step-1">
+                <h3 class="text-lg font-bold text-white mb-4">1. Select Complaint Type</h3>
+                <div class="grid grid-cols-1 gap-4 mb-6">
+                    <div class="card p-4 rounded-lg cursor-pointer border-blue-500 border" onclick="selectComplaintType('ipc-182')">
+                        <h4 class="font-bold text-white mb-1">Counter FIR (IPC 182)</h4>
+                        <p class="text-gray-400 text-sm">When police refuse to register your complaint against false allegations</p>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectComplaintType('crpc-200')">
+                        <h4 class="font-bold text-white mb-1">Private Complaint (CrPC 200)</h4>
+                        <p class="text-gray-400 text-sm">Direct complaint to magistrate when police don't act</p>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectComplaintType('rti')">
+                        <h4 class="font-bold text-white mb-1">RTI Application</h4>
+                        <p class="text-gray-400 text-sm">To get information about police inaction on your complaint</p>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button class="btn-primary px-4 py-2 rounded-lg" onclick="nextComplaintStep()">
+                        Next <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="complaint-step-2" class="hidden">
+                <h3 class="text-lg font-bold text-white mb-4">2. Enter Case Details</h3>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Police Station (if known)</label>
+                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="E.g.: Rohini PS, Delhi">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Original Case Details</label>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe the false case filed against you including section numbers, dates, and key allegations"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Your Evidence</label>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe evidence you have (messages, recordings, witnesses etc.) that proves the case is false"></textarea>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg" onclick="prevComplaintStep()">
+                        <i class="fas fa-arrow-left mr-1"></i> Back
+                    </button>
+                    <button class="btn-primary px-4 py-2 rounded-lg" onclick="nextComplaintStep()">
+                        Next <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="complaint-step-3" class="hidden">
+                <h3 class="text-lg font-bold text-white mb-4">3. Upload Supporting Documents</h3>
+                <div class="card p-6 rounded-lg border-dashed border-2 border-gray-700 text-center mb-4 cursor-pointer hover:border-blue-500">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                    <p class="text-gray-400">Click to upload or drag & drop files</p>
+                    <p class="text-gray-500 text-sm mt-1">Supports JPG, PNG, PDF (Max 10MB)</p>
+                    <input type="file" class="hidden">
+                </div>
+                <div class="text-gray-400 text-sm mb-6">
+                    <p><i class="fas fa-info-circle text-blue-400 mr-1"></i> Upload FIR copy, complaint rejection proof, evidence screenshots etc.</p>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg" onclick="prevComplaintStep()">
+                        <i class="fas fa-arrow-left mr-1"></i> Back
+                    </button>
+                    <button class="btn-primary px-4 py-2 rounded-lg" onclick="generateComplaintDraft()">
+                        Generate Draft <i class="fas fa-magic ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="complaint-step-4" class="hidden">
+                <div class="text-center py-6">
+                    <i class="fas fa-check-circle text-5xl text-green-400 mb-4"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Complaint Draft Ready!</h3>
+                    <p class="text-gray-400 mb-6">Your customized counter complaint draft has been generated based on your inputs.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-pdf mr-2"></i> Download PDF
+                        </button>
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-word mr-2"></i> Download DOC
+                        </button>
+                    </div>
+                    
+                    <div class="card p-4 rounded-lg mb-6 bg-gray-900">
+                        <h4 class="font-bold text-white mb-2">Next Steps Checklist</h4>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                                <span>Get draft notarized</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                                <span>Make 2 copies of all documents</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                                <span>Visit police station with witness</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                                <span>Record video if police refuse</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <button class="btn-primary px-6 py-3 rounded-lg" onclick="closeModal('complaint-modal')">
+                        Done <i class="fas fa-check ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Strategy Modal -->
+    <div id="strategy-modal" class="modal">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-chess text-blue-400 mr-2"></i>
+                    Case Strategy Builder
+                </h2>
+                <button onclick="closeModal('strategy-modal')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="progress-bar mb-6">
+                <div class="progress-fill" id="strategy-progress" style="width: 25%"></div>
+            </div>
+            
+            <div id="strategy-step-1">
+                <h3 class="text-lg font-bold text-white mb-4">1. Select Your Case Type</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="card p-4 rounded-lg cursor-pointer border-blue-500 border" onclick="selectCaseType('498a')">
+                        <h4 class="font-bold text-white mb-1">False 498A Case</h4>
+                        <p class="text-gray-400 text-sm">Dowry harassment allegations</p>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectCaseType('dv')">
+                        <h4 class="font-bold text-white mb-1">Domestic Violence (DV)</h4>
+                        <p class="text-gray-400 text-sm">False allegations under DV Act</p>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectCaseType('maintenance')">
+                        <h4 class="font-bold text-white mb-1">Maintenance Case</h4>
+                        <p class="text-gray-400 text-sm">Excessive maintenance demands</p>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectCaseType('custody')">
+                        <h4 class="font-bold text-white mb-1">Child Custody</h4>
+                        <p class="text-gray-400 text-sm">Fighting for visitation/custody</p>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectCaseType('extortion')">
+                        <h4 class="font-bold text-white mb-1">Financial Extortion</h4>
+                        <p class="text-gray-400 text-sm">Money demands under pressure</p>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectCaseType('other')">
+                        <h4 class="font-bold text-white mb-1">Other Legal Issue</h4>
+                        <p class="text-gray-400 text-sm">Specify in next step</p>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button class="btn-primary px-4 py-2 rounded-lg" onclick="nextStrategyStep()">
+                        Next <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="strategy-step-2" class="hidden">
+                <h3 class="text-lg font-bold text-white mb-4">2. Case Details</h3>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Current Case Stage</label>
+                    <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>FIR registered but no arrest</option>
+                        <option>Chargesheet filed</option>
+                        <option>Trial ongoing</option>
+                        <option>Mediation stage</option>
+                        <option>Final arguments</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Your Main Concerns</label>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="What are your biggest challenges in this case? (e.g., police bias, high maintenance demands, no visitation rights)"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Your Evidence</label>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="What evidence do you have? (messages, recordings, witnesses, financial documents etc.)"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Desired Outcome</label>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2" placeholder="What would be an ideal resolution for you? (e.g., case withdrawal, fair maintenance, shared custody)"></textarea>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg" onclick="prevStrategyStep()">
+                        <i class="fas fa-arrow-left mr-1"></i> Back
+                    </button>
+                    <button class="btn-primary px-4 py-2 rounded-lg" onclick="nextStrategyStep()">
+                        Next <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="strategy-step-3" class="hidden">
+                <h3 class="text-lg font-bold text-white mb-4">3. Generate Strategy</h3>
+                <div class="card p-6 rounded-lg bg-gray-900 mb-6">
+                    <div class="flex items-start mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">AI Strategy Analysis</h4>
+                            <p class="text-gray-400 text-sm">Based on 127 similar cases in our database</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h5 class="font-bold text-white mb-2">1. Immediate Actions (Next 7 Days)</h5>
+                            <ul class="text-gray-400 text-sm list-disc pl-5 space-y-1">
+                                <li>File RTI about police investigation status</li>
+                                <li>Send legal notice to opposing party</li>
+                                <li>Document all communications</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h5 class="font-bold text-white mb-2">2. Legal Strategy</h5>
+                            <ul class="text-gray-400 text-sm list-disc pl-5 space-y-1">
+                                <li>File for quashing using Arnesh Kumar guidelines</li>
+                                <li>Counter complaint for perjury</li>
+                                <li>Apply for anticipatory bail if needed</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h5 class="font-bold text-white mb-2">3. Settlement Options</h5>
+                            <ul class="text-gray-400 text-sm list-disc pl-5 space-y-1">
+                                <li>Mediation through court</li>
+                                <li>Conditional withdrawal offer</li>
+                                <li>Mutual consent terms</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-white mb-2">Similar Case References</label>
+                    <div class="card p-4 rounded-lg bg-gray-900">
+                        <div class="flex items-start mb-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400 text-sm">
+                                1
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-white text-sm">Rajesh vs State (Delhi HC 2022)</h5>
+                                <p class="text-gray-400 text-xs">Similar facts: Quashed 498A using same evidence strategy</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400 text-sm">
+                                2
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-white text-sm">Amit Kumar (Community Case 2023)</h5>
+                                <p class="text-gray-400 text-xs">Won through RTI pressure on police</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg" onclick="prevStrategyStep()">
+                        <i class="fas fa-arrow-left mr-1"></i> Back
+                    </button>
+                    <button class="btn-primary px-4 py-2 rounded-lg" onclick="nextStrategyStep()">
+                        Get Full Strategy <i class="fas fa-download ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="strategy-step-4" class="hidden">
+                <div class="text-center py-6">
+                    <i class="fas fa-check-circle text-5xl text-green-400 mb-4"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Strategy Generated!</h3>
+                    <p class="text-gray-400 mb-6">Your personalized case strategy is ready with step-by-step action plan.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-pdf mr-2"></i> Download PDF
+                        </button>
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-word mr-2"></i> Download DOC
+                        </button>
+                    </div>
+                    
+                    <div class="card p-4 rounded-lg mb-6 bg-gray-900 text-left">
+                        <h4 class="font-bold text-white mb-2">Recommended Next Steps</h4>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                                <span>Connect with recommended lawyers in your area</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                                <span>Join our community discussion on similar cases</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                                <span>Book counseling session for emotional support</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                            <i class="fas fa-users mr-1"></i> Community Help
+                        </button>
+                        <button class="btn-primary px-4 py-2 rounded-lg" onclick="closeModal('strategy-modal')">
+                            Done <i class="fas fa-check ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pressure Police Modal -->
+    <div id="pressure-modal" class="modal">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-bullhorn text-blue-400 mr-2"></i>
+                    Pressure Police Tools
+                </h2>
+                <button onclick="closeModal('pressure-modal')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-white mb-2">Select Action</label>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="card p-4 rounded-lg cursor-pointer border-blue-500 border" onclick="selectPressureTool('rti')">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">RTI Application</h4>
+                                <p class="text-gray-400 text-sm">Get information about police inaction on your complaint</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectPressureTool('social')">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                                <i class="fas fa-hashtag"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">Social Media Campaign</h4>
+                                <p class="text-gray-400 text-sm">Auto-generate tweets to tag police and create pressure</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectPressureTool('complaint')">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">Complaint to Senior Officers</h4>
+                                <p class="text-gray-400 text-sm">Draft complaint to DCP/Commissioner about police inaction</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-4 rounded-lg cursor-pointer" onclick="selectPressureTool('media')">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                                <i class="fas fa-tv"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">Media Outreach</h4>
+                                <p class="text-gray-400 text-sm">Template to contact journalists about your case</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="pressure-tool-content" class="hidden">
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Police Station Details</label>
+                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter police station name and city">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Your Complaint Details</label>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Briefly describe your original complaint and police inaction"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white mb-2">Upload Supporting Documents</label>
+                    <div class="card p-4 rounded-lg border-dashed border-2 border-gray-700 text-center cursor-pointer hover:border-blue-500">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-400">Click to upload FIR copy, complaint proof etc.</p>
+                        <input type="file" class="hidden">
+                    </div>
+                </div>
+                
+                <div id="rti-preview" class="hidden card p-4 rounded-lg bg-gray-900 mb-4">
+                    <h4 class="font-bold text-white mb-2">RTI Application Preview</h4>
+                    <p class="text-gray-400 text-sm mb-2">To: Public Information Officer, Delhi Police</p>
+                    <p class="text-gray-400 text-sm mb-2">Subject: Information regarding Complaint No. XYZ dated DD/MM/YYYY</p>
+                    <p class="text-gray-400 text-sm">Under RTI Act 2005, I seek following information about my complaint registered at Rohini PS...</p>
+                </div>
+                
+                <div id="social-preview" class="hidden card p-4 rounded-lg bg-gray-900 mb-4">
+                    <h4 class="font-bold text-white mb-2">Social Media Post Preview</h4>
+                    <div class="bg-gray-800 p-3 rounded-lg">
+                        <p class="text-white mb-2">@DelhiPolice @DCPNorthDelhi Why no action on my counter complaint (No. XYZ) at Rohini PS? FIR registered on DD/MM but no investigation. #PoliceInaction #JusticeForMen</p>
+                        <div class="flex space-x-3 text-gray-400 text-sm">
+                            <span><i class="far fa-clock"></i> Scheduled: Today 11 AM</span>
+                            <span><i class="fas fa-retweet"></i> Auto-tag: @CPDelhi @LtGovDelhi</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg mr-2" onclick="resetPressureTool()">
+                        <i class="fas fa-undo mr-1"></i> Change Tool
+                    </button>
+                    <button id="generate-pressure-tool" class="btn-primary px-4 py-2 rounded-lg">
+                        Generate <i class="fas fa-magic ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="pressure-tool-result" class="hidden text-center py-6">
+                <i class="fas fa-check-circle text-5xl text-green-400 mb-4"></i>
+                <h3 class="text-xl font-bold text-white mb-2">Tool Generated!</h3>
+                <p class="text-gray-400 mb-6" id="pressure-success-message">Your RTI application is ready to download.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Download PDF
+                    </button>
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-file-word mr-2"></i> Download DOC
+                    </button>
+                </div>
+                
+                <div class="card p-4 rounded-lg mb-6 bg-gray-900 text-left">
+                    <h4 class="font-bold text-white mb-2">Next Steps</h4>
+                    <ul class="text-gray-400 text-sm space-y-2" id="pressure-next-steps">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                            <span>Submit RTI at police headquarters or online at rtionline.gov.in</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                            <span>Keep acknowledgment receipt safe</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i>
+                            <span>Follow up in 30 days if no response</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <button class="btn-primary px-6 py-3 rounded-lg" onclick="closeModal('pressure-modal')">
+                    Done <i class="fas fa-check ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Story Modal -->
+    <div id="post-modal" class="modal">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-edit text-blue-400 mr-2"></i>
+                    Share Your Story
+                </h2>
+                <button onclick="closeModal('post-modal')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-white mb-2">Title</label>
+                <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="E.g.: Fighting false 498A case in Delhi">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-white mb-2">Your Story</label>
+                <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="6" placeholder="Share your experience (case details, challenges faced, current status)"></textarea>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-white mb-2">Case Type</label>
+                    <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>False 498A</option>
+                        <option>Domestic Violence (DV)</option>
+                        <option>Maintenance Case</option>
+                        <option>Child Custody</option>
+                        <option>Extortion</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-white mb-2">Location</label>
+                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="City/State">
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-white mb-2">Police Station (if applicable)</label>
+                <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Name of police station">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-white mb-2">Tags</label>
+                <div class="flex flex-wrap gap-2">
+                    <span class="case-tag tag-498a cursor-pointer">498A</span>
+                    <span class="case-tag tag-dv cursor-pointer">DV</span>
+                    <span class="case-tag tag-custody cursor-pointer">Custody</span>
+                    <span class="case-tag tag-rti cursor-pointer">RTI</span>
+                    <span class="case-tag cursor-pointer">Police Inaction</span>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="flex items-center text-white">
+                    <input type="checkbox" class="mr-2 rounded bg-gray-800 border-gray-700">
+                    Post Anonymously
+                </label>
+            </div>
+            
+            <div class="flex justify-end gap-4">
+                <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg" onclick="closeModal('post-modal')">
+                    Cancel
+                </button>
+                <button class="btn-primary px-4 py-2 rounded-lg" onclick="submitPost()">
+                    Post to Community
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emotional Support Modal -->
+    <div id="emotional-modal" class="modal">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-heart text-blue-400 mr-2"></i>
+                    Emotional Support
+                </h2>
+                <button onclick="closeModal('emotional-modal')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="card p-6 rounded-lg bg-gray-900 mb-6">
+                <div class="flex items-start mb-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                        <i class="fas fa-robot text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white">AI Counselor</h3>
+                        <p class="text-gray-400 text-sm">Here to help you manage stress during legal battles</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="card p-4 rounded-lg bg-gray-800 cursor-pointer hover:bg-gray-700" onclick="showAITip('stress')">
+                        <h4 class="font-bold text-white mb-1">Stress Management Tips</h4>
+                        <p class="text-gray-400 text-sm">Techniques to reduce anxiety during case</p>
+                    </div>
+                    <div class="card p-4 rounded-lg bg-gray-800 cursor-pointer hover:bg-gray-700" onclick="showAITip('sleep')">
+                        <h4 class="font-bold text-white mb-1">Sleep Better</h4>
+                        <p class="text-gray-400 text-sm">How to get rest despite legal worries</p>
+                    </div>
+                    <div class="card p-4 rounded-lg bg-gray-800 cursor-pointer hover:bg-gray-700" onclick="showAITip('anger')">
+                        <h4 class="font-bold text-white mb-1">Managing Anger</h4>
+                        <p class="text-gray-400 text-sm">Healthy ways to process frustration</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card p-6 rounded-lg bg-gray-900">
+                <div class="flex items-start mb-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400">
+                        <i class="fas fa-user-md text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white">Professional Help</h3>
+                        <p class="text-gray-400 text-sm">Connect with counselors who understand legal stress</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="card p-4 rounded-lg bg-gray-800">
+                        <h4 class="font-bold text-white mb-1">Free First Session</h4>
+                        <p class="text-gray-400 text-sm mb-3">30-minute consultation with our partner counselors</p>
+                        <button class="btn-primary px-4 py-2 rounded-lg text-sm w-full">
+                            Book Now
+                        </button>
+                    </div>
+                    <div class="card p-4 rounded-lg bg-gray-800">
+                        <h4 class="font-bold text-white mb-1">Support Groups</h4>
+                        <p class="text-gray-400 text-sm mb-3">Weekly video calls with others in similar situations</p>
+                        <button class="btn-primary px-4 py-2 rounded-lg text-sm w-full">
+                            Join Next Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extortion Modal -->
+    <div id="extortion-modal" class="modal">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-money-bill-wave text-blue-400 mr-2"></i>
+                    Fight Extortion
+                </h2>
+                <button onclick="closeModal('extortion-modal')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-white mb-2">Extortion Type</label>
+                <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option>Money Demands (Dowry)</option>
+                    <option>Property Transfer</option>
+                    <option>High Maintenance</option>
+                    <option>Other Financial Pressure</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-white mb-2">Details of Demands</label>
+                <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe the demands, amounts, and how they were communicated"></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-white mb-2">Upload Evidence</label>
+                <div class="card p-4 rounded-lg border-dashed border-2 border-gray-700 text-center cursor-pointer hover:border-blue-500">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                    <p class="text-gray-400">Click to upload screenshots, recordings, legal notices</p>
+                    <input type="file" class="hidden">
+                </div>
+            </div>
+            
+            <div class="card p-4 rounded-lg bg-gray-900 mb-6">
+                <h4 class="font-bold text-white mb-2">Generated Tools</h4>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-file-contract text-blue-400 mr-3"></i>
+                            <span class="text-white">Cease & Desist Notice</span>
+                        </div>
+                        <button class="text-blue-400 text-sm">Download</button>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-file-invoice text-blue-400 mr-3"></i>
+                            <span class="text-white">Financial Documentation Guide</span>
+                        </div>
+                        <button class="text-blue-400 text-sm">Download</button>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-comments text-blue-400 mr-3"></i>
+                            <span class="text-white">Negotiation Script</span>
+                        </div>
+                        <button class="text-blue-400 text-sm">Download</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end">
+                <button class="btn-primary px-4 py-2 rounded-lg" onclick="closeModal('extortion-modal')">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Buttons -->
+    <button class="floating-btn story-btn" onclick="openModal('post-modal')">
+        <i class="fas fa-edit"></i>
+    </button>
+    <button class="floating-btn chatbot-btn" onclick="openChatbot()">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 p-8 text-center border-t border-gray-800">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-gavel text-white"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-white">Men's JusticeHub</h2>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram text-xl"></i></a>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-left mb-8">
+                <div>
+                    <h3 class="text-white font-bold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Legal Guides</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Case References</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Templates</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Videos</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Community</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Forum</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Success Stories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Meetups</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Volunteer</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Counseling</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Legal Aid</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">About</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Our Mission</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Team</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Partners</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Donate</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-6 border-t border-gray-800">
+                <p class="text-gray-400">© 2025 Men's JusticeHub. All rights reserved. Fight for your rights! ⚖️</p>
+                <p class="text-gray-500 text-sm mt-2">Disclaimer: This platform provides legal information, not professional legal advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Modal controls
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        // Complaint modal steps
+        let currentComplaintStep = 1;
+        
+        function nextComplaintStep() {
+            if (currentComplaintStep < 4) {
+                document.getElementById(`complaint-step-${currentComplaintStep}`).classList.add('hidden');
+                currentComplaintStep++;
+                document.getElementById(`complaint-step-${currentComplaintStep}`).classList.remove('hidden');
+                document.getElementById('complaint-progress').style.width = `${currentComplaintStep * 25}%`;
+            }
+        }
+        
+        function prevComplaintStep() {
+            if (currentComplaintStep > 1) {
+                document.getElementById(`complaint-step-${currentComplaintStep}`).classList.add('hidden');
+                currentComplaintStep--;
+                document.getElementById(`complaint-step-${currentComplaintStep}`).classList.remove('hidden');
+                document.getElementById('complaint-progress').style.width = `${currentComplaintStep * 25}%`;
+            }
+        }
+        
+        function selectComplaintType(type) {
+            // Reset all selections
+            document.querySelectorAll('#complaint-step-1 .card').forEach(card => {
+                card.classList.remove('border-blue-500', 'border');
+            });
+            
+            // Add border to selected card
+            event.currentTarget.classList.add('border-blue-500', 'border');
+        }
+        
+        function generateComplaintDraft() {
+            // Simulate loading
+            const button = event.currentTarget;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Generating...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                nextComplaintStep();
+                button.innerHTML = 'Generate Draft <i class="fas fa-magic ml-1"></i>';
+                button.disabled = false;
+            }, 1500);
+        }
+        
+        // Strategy modal steps
+        let currentStrategyStep = 1;
+        
+        function nextStrategyStep() {
+            if (currentStrategyStep < 4) {
+                document.getElementById(`strategy-step-${currentStrategyStep}`).classList.add('hidden');
+                currentStrategyStep++;
+                document.getElementById(`strategy-step-${currentStrategyStep}`).classList.remove('hidden');
+                document.getElementById('strategy-progress').style.width = `${currentStrategyStep * 25}%`;
+            }
+        }
+        
+        function prevStrategyStep() {
+            if (currentStrategyStep > 1) {
+                document.getElementById(`strategy-step-${currentStrategyStep}`).classList.add('hidden');
+                currentStrategyStep--;
+                document.getElementById(`strategy-step-${currentStrategyStep}`).classList.remove('hidden');
+                document.getElementById('strategy-progress').style.width = `${currentStrategyStep * 25}%`;
+            }
+        }
+        
+        function selectCaseType(type) {
+            // Reset all selections
+            document.querySelectorAll('#strategy-step-1 .card').forEach(card => {
+                card.classList.remove('border-blue-500', 'border');
+            });
+            
+            // Add border to selected card
+            event.currentTarget.classList.add('border-blue-500', 'border');
+        }
+        
+        // Pressure tools modal
+        function selectPressureTool(tool) {
+            document.getElementById('pressure-tool-content').classList.remove('hidden');
+            document.getElementById('pressure-tool-result').classList.add('hidden');
+            
+            // Reset all selections
+            document.querySelectorAll('#pressure-modal .card').forEach(card => {
+                card.classList.remove('border-blue-500', 'border');
+            });
+            
+            // Add border to selected card
+            event.currentTarget.classList.add('border-blue-500', 'border');
+            
+            // Show relevant preview
+            document.querySelectorAll('[id$="-preview"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`${tool}-preview`).classList.remove('hidden');
+            
+            // Update generate button text
+            document.getElementById('generate-pressure-tool').innerHTML = 
+                tool === 'social' ? 'Generate Post' : 'Generate Document';
+        }
+        
+        function resetPressureTool() {
+            document.getElementById('pressure-tool-content').classList.add('hidden');
+            document.querySelectorAll('#pressure-modal .card').forEach(card => {
+                card.classList.remove('border-blue-500', 'border');
+            });
+        }
+        
+        function generatePressureTool() {
+            const button = event.currentTarget;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Generating...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                document.getElementById('pressure-tool-content').classList.add('hidden');
+                document.getElementById('pressure-tool-result').classList.remove('hidden');
+                
+                // Set success message based on selected tool
+                const selectedTool = document.querySelector('#pressure-modal .card.border-blue-500 h4').textContent;
+                document.getElementById('pressure-success-message').textContent = 
+                    `Your ${selectedTool} tool is ready to download.`;
+                
+                // Set next steps
+                const nextStepsList = document.getElementById('pressure-next-steps');
+                nextStepsList.innerHTML = '';
+                
+                let steps = [];
+                if (selectedTool.includes('RTI')) {
+                    steps = [
+                        'Submit RTI at police headquarters or online at rtionline.gov.in',
+                        'Keep acknowledgment receipt safe',
+                        'Follow up in 30 days if no response'
+                    ];
+                } else if (selectedTool.includes('Social')) {
+                    steps = [
+                        'Review and edit the generated post if needed',
+                        'Post at peak times (11AM or 7PM) for maximum visibility',
+                        'Engage with comments and retweets'
+                    ];
+                } else if (selectedTool.includes('Complaint')) {
+                    steps = [
+                        'Print two copies of the complaint',
+                        'Submit at DCP office with proof of delivery',
+                        'Follow up in 15 days if no response'
+                    ];
+                } else {
+                    steps = [
+                        'Review the generated document carefully',
+                        'Customize with your specific details',
+                        'Use as per your legal strategy'
+                    ];
+                }
+                
+                steps.forEach(step => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start';
+                    li.innerHTML = `<i class="fas fa-check-circle text-green-400 mr-2 mt-1"></i><span>${step}</span>`;
+                    nextStepsList.appendChild(li);
+                });
+                
+                button.innerHTML = 'Generate <i class="fas fa-magic ml-1"></i>';
+                button.disabled = false;
+            }, 1500);
+        }
+        
+        document.getElementById('generate-pressure-tool').addEventListener('click', generatePressureTool);
+        
+        // Post submission
+        function submitPost() {
+            const button = event.currentTarget;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Posting...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                closeModal('post-modal');
+                alert('Your post has been shared with the community!');
+                button.innerHTML = 'Post to Community';
+                button.disabled = false;
+            }, 1000);
+        }
+        
+        // AI tips
+        function showAITip(type) {
+            let title = '';
+            let content = '';
+            
+            switch(type) {
+                case 'stress':
+                    title = 'Stress Management Tips';
+                    content = '1. Practice deep breathing (4-7-8 technique)\n2. Take regular breaks from case work\n3. Maintain a gratitude journal\n4. Try progressive muscle relaxation\n5. Set aside "worry time" to limit anxiety';
+                    break;
+                case 'sleep':
+                    title = 'Sleep Better Tips';
+                    content = '1. Maintain consistent sleep schedule\n2. Avoid screens 1 hour before bed\n3. Try guided sleep meditations\n4. Keep a notepad by bed for racing thoughts\n5. Limit caffeine after 2PM';
+                    break;
+                case 'anger':
+                    title = 'Managing Anger Tips';
+                    content = '1. Recognize early warning signs\n2. Use timeout technique when upset\n3. Channel energy into exercise\n4. Practice cognitive reframing\n5. Express feelings through writing';
+                    break;
+            }
+            
+            alert(`${title}:\n\n${content}`);
+        }
+        
+        // Chatbot
+        function openChatbot() {
+            alert('LegalBot: Hello! How can I help you today?\n\n1. File a counter complaint\n2. Understand my case options\n3. Find emotional support\n4. Connect with legal help\n\nReply with the number or ask your question.');
+        }
+        
+        // Switch tabs in community hub
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set first tab as active
+            document.querySelector('.tab').classList.add('active');
+        });
+    </script>
+</body>
+</html>
