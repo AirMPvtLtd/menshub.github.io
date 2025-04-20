@@ -1,0 +1,29 @@
+men-justicehub-backend/
+├── config/
+│   ├── db.js
+│   └── auth.js
+├── controllers/
+│   ├── authController.js
+│   ├── caseController.js
+│   ├── communityController.js
+│   ├── documentController.js
+│   └── supportController.js
+├── models/
+│   ├── User.js
+│   ├── Case.js
+│   ├── CommunityPost.js
+│   ├── Document.js
+│   └── SupportTicket.js
+├── routes/
+│   ├── authRoutes.js
+│   ├── caseRoutes.js
+│   ├── communityRoutes.js
+│   ├── documentRoutes.js
+│   └── supportRoutes.js
+├── middleware/
+│   ├── auth.js
+│   └── error.js
+├── uploads/
+├── .env
+├── server.js
+└── package.json
