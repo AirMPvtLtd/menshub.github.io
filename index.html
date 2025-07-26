@@ -224,6 +224,105 @@
                 right: 20px;
             }
         }
+        .chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            background: var(--light-dark);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            display: none;
+            flex-direction: column;
+            border: 1px solid #374151;
+        }
+        .chatbot-header {
+            padding: 12px 16px;
+            background: var(--primary);
+            color: white;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chatbot-messages {
+            padding: 16px;
+            height: 300px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .chatbot-input {
+            padding: 12px;
+            border-top: 1px solid #374151;
+            display: flex;
+        }
+        .chatbot-input input {
+            flex-grow: 1;
+            background: var(--dark);
+            border: 1px solid #374151;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: white;
+            outline: none;
+        }
+        .chatbot-input button {
+            margin-left: 8px;
+            background: var(--primary);
+            border: none;
+            border-radius: 20px;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+        }
+        .message {
+            margin-bottom: 12px;
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .bot-message {
+            background: #374151;
+            color: white;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        .typing-indicator {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #374151;
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: #9CA3AF;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: typing 1s infinite;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+            100% { transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col gradient-bg">
@@ -677,6 +776,34 @@
         </div>
     </main>
 
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <div class="flex items-center">
+                <i class="fas fa-robot mr-2"></i>
+                <span>Legal Assistant</span>
+            </div>
+            <button onclick="closeChatbot()" class="text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot-message">
+                <p>Hello! I'm your legal assistant. How can I help you today?</p>
+                <p class="text-xs text-gray-400 mt-1">Here are some common questions:</p>
+                <ul class="text-xs text-gray-300 mt-1 list-disc pl-5">
+                    <li class="mb-1">How to file a counter complaint?</li>
+                    <li class="mb-1">What to do if police aren't taking action?</li>
+                    <li class="mb-1">How to handle false 498A cases?</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Type your legal question..." onkeypress="handleChatbotKeyPress(event)">
+            <button onclick="sendChatbotMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
     <!-- Modals -->
     <!-- Complaint Filing Modal -->
     <div id="complaint-modal" class="modal">
@@ -723,15 +850,15 @@
                 <h3 class="text-lg font-bold text-white mb-4">2. Enter Case Details</h3>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Police Station (if known)</label>
-                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="E.g.: Rohini PS, Delhi">
+                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="E.g.: Rohini PS, Delhi" id="complaint-police-station">
                 </div>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Original Case Details</label>
-                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe the false case filed against you including section numbers, dates, and key allegations"></textarea>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe the false case filed against you including section numbers, dates, and key allegations" id="complaint-case-details"></textarea>
                 </div>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Your Evidence</label>
-                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe evidence you have (messages, recordings, witnesses etc.) that proves the case is false"></textarea>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe evidence you have (messages, recordings, witnesses etc.) that proves the case is false" id="complaint-evidence"></textarea>
                 </div>
                 
                 <div class="flex justify-between">
@@ -750,7 +877,7 @@
                     <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
                     <p class="text-gray-400">Click to upload or drag & drop files</p>
                     <p class="text-gray-500 text-sm mt-1">Supports JPG, PNG, PDF (Max 10MB)</p>
-                    <input type="file" class="hidden">
+                    <input type="file" class="hidden" id="complaint-files">
                 </div>
                 <div class="text-gray-400 text-sm mb-6">
                     <p><i class="fas fa-info-circle text-blue-400 mr-1"></i> Upload FIR copy, complaint rejection proof, evidence screenshots etc.</p>
@@ -773,10 +900,10 @@
                     <p class="text-gray-400 mb-6">Your customized counter complaint draft has been generated based on your inputs.</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center" onclick="downloadComplaint('pdf')">
                             <i class="fas fa-file-pdf mr-2"></i> Download PDF
                         </button>
-                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center" onclick="downloadComplaint('doc')">
                             <i class="fas fa-file-word mr-2"></i> Download DOC
                         </button>
                     </div>
@@ -868,7 +995,7 @@
                 <h3 class="text-lg font-bold text-white mb-4">2. Case Details</h3>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Current Case Stage</label>
-                    <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" id="case-stage">
                         <option>FIR registered but no arrest</option>
                         <option>Chargesheet filed</option>
                         <option>Trial ongoing</option>
@@ -878,15 +1005,15 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Your Main Concerns</label>
-                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="What are your biggest challenges in this case? (e.g., police bias, high maintenance demands, no visitation rights)"></textarea>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="What are your biggest challenges in this case? (e.g., police bias, high maintenance demands, no visitation rights)" id="case-concerns"></textarea>
                 </div>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Your Evidence</label>
-                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="What evidence do you have? (messages, recordings, witnesses, financial documents etc.)"></textarea>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="What evidence do you have? (messages, recordings, witnesses, financial documents etc.)" id="case-evidence"></textarea>
                 </div>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Desired Outcome</label>
-                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2" placeholder="What would be an ideal resolution for you? (e.g., case withdrawal, fair maintenance, shared custody)"></textarea>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2" placeholder="What would be an ideal resolution for you? (e.g., case withdrawal, fair maintenance, shared custody)" id="case-outcome"></textarea>
                 </div>
                 
                 <div class="flex justify-between">
@@ -912,56 +1039,20 @@
                         </div>
                     </div>
                     
-                    <div class="space-y-4">
-                        <div>
-                            <h5 class="font-bold text-white mb-2">1. Immediate Actions (Next 7 Days)</h5>
-                            <ul class="text-gray-400 text-sm list-disc pl-5 space-y-1">
-                                <li>File RTI about police investigation status</li>
-                                <li>Send legal notice to opposing party</li>
-                                <li>Document all communications</li>
-                            </ul>
-                        </div>
-                        
-                        <div>
-                            <h5 class="font-bold text-white mb-2">2. Legal Strategy</h5>
-                            <ul class="text-gray-400 text-sm list-disc pl-5 space-y-1">
-                                <li>File for quashing using Arnesh Kumar guidelines</li>
-                                <li>Counter complaint for perjury</li>
-                                <li>Apply for anticipatory bail if needed</li>
-                            </ul>
-                        </div>
-                        
-                        <div>
-                            <h5 class="font-bold text-white mb-2">3. Settlement Options</h5>
-                            <ul class="text-gray-400 text-sm list-disc pl-5 space-y-1">
-                                <li>Mediation through court</li>
-                                <li>Conditional withdrawal offer</li>
-                                <li>Mutual consent terms</li>
-                            </ul>
+                    <div class="space-y-4" id="ai-strategy-content">
+                        <div class="text-center py-4">
+                            <i class="fas fa-spinner fa-spin text-2xl text-blue-400 mb-2"></i>
+                            <p class="text-gray-400">Analyzing your case details...</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="mb-6">
                     <label class="block text-white mb-2">Similar Case References</label>
-                    <div class="card p-4 rounded-lg bg-gray-900">
-                        <div class="flex items-start mb-3">
-                            <div class="w-8 h-8 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400 text-sm">
-                                1
-                            </div>
-                            <div>
-                                <h5 class="font-bold text-white text-sm">Rajesh vs State (Delhi HC 2022)</h5>
-                                <p class="text-gray-400 text-xs">Similar facts: Quashed 498A using same evidence strategy</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="w-8 h-8 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400 text-sm">
-                                2
-                            </div>
-                            <div>
-                                <h5 class="font-bold text-white text-sm">Amit Kumar (Community Case 2023)</h5>
-                                <p class="text-gray-400 text-xs">Won through RTI pressure on police</p>
-                            </div>
+                    <div class="card p-4 rounded-lg bg-gray-900" id="similar-cases-content">
+                        <div class="text-center py-4">
+                            <i class="fas fa-spinner fa-spin text-2xl text-blue-400 mb-2"></i>
+                            <p class="text-gray-400">Finding similar cases...</p>
                         </div>
                     </div>
                 </div>
@@ -983,10 +1074,10 @@
                     <p class="text-gray-400 mb-6">Your personalized case strategy is ready with step-by-step action plan.</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center" onclick="downloadStrategy('pdf')">
                             <i class="fas fa-file-pdf mr-2"></i> Download PDF
                         </button>
-                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center" onclick="downloadStrategy('doc')">
                             <i class="fas fa-file-word mr-2"></i> Download DOC
                         </button>
                     </div>
@@ -1088,18 +1179,18 @@
             <div id="pressure-tool-content" class="hidden">
                 <div class="mb-4">
                     <label class="block text-white mb-2">Police Station Details</label>
-                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter police station name and city">
+                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter police station name and city" id="police-station-details">
                 </div>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Your Complaint Details</label>
-                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Briefly describe your original complaint and police inaction"></textarea>
+                    <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Briefly describe your original complaint and police inaction" id="complaint-details"></textarea>
                 </div>
                 <div class="mb-4">
                     <label class="block text-white mb-2">Upload Supporting Documents</label>
                     <div class="card p-4 rounded-lg border-dashed border-2 border-gray-700 text-center cursor-pointer hover:border-blue-500">
                         <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
                         <p class="text-gray-400">Click to upload FIR copy, complaint proof etc.</p>
-                        <input type="file" class="hidden">
+                        <input type="file" class="hidden" id="pressure-files">
                     </div>
                 </div>
                 
@@ -1125,7 +1216,7 @@
                     <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg mr-2" onclick="resetPressureTool()">
                         <i class="fas fa-undo mr-1"></i> Change Tool
                     </button>
-                    <button id="generate-pressure-tool" class="btn-primary px-4 py-2 rounded-lg">
+                    <button id="generate-pressure-tool" class="btn-primary px-4 py-2 rounded-lg" onclick="generatePressureDocument()">
                         Generate <i class="fas fa-magic ml-1"></i>
                     </button>
                 </div>
@@ -1137,10 +1228,10 @@
                 <p class="text-gray-400 mb-6" id="pressure-success-message">Your RTI application is ready to download.</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center" onclick="downloadPressureDoc('pdf')">
                         <i class="fas fa-file-pdf mr-2"></i> Download PDF
                     </button>
-                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg flex items-center justify-center" onclick="downloadPressureDoc('doc')">
                         <i class="fas fa-file-word mr-2"></i> Download DOC
                     </button>
                 </div>
@@ -1255,18 +1346,18 @@
             
             <div class="mb-4">
                 <label class="block text-white mb-2">Title</label>
-                <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="E.g.: Fighting false 498A case in Delhi">
+                <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="E.g.: Fighting false 498A case in Delhi" id="post-title">
             </div>
             
             <div class="mb-4">
                 <label class="block text-white mb-2">Your Story</label>
-                <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="6" placeholder="Share your experience (case details, challenges faced, current status)"></textarea>
+                <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="6" placeholder="Share your experience (case details, challenges faced, current status)" id="post-content"></textarea>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="block text-white mb-2">Case Type</label>
-                    <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" id="post-case-type">
                         <option>False 498A</option>
                         <option>Domestic Violence (DV)</option>
                         <option>Maintenance Case</option>
@@ -1277,13 +1368,13 @@
                 </div>
                 <div>
                     <label class="block text-white mb-2">Location</label>
-                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="City/State">
+                    <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="City/State" id="post-location">
                 </div>
             </div>
             
             <div class="mb-4">
                 <label class="block text-white mb-2">Police Station (if applicable)</label>
-                <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Name of police station">
+                <input type="text" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Name of police station" id="post-police-station">
             </div>
             
             <div class="mb-4">
@@ -1299,7 +1390,7 @@
             
             <div class="mb-6">
                 <label class="flex items-center text-white">
-                    <input type="checkbox" class="mr-2 rounded bg-gray-800 border-gray-700">
+                    <input type="checkbox" class="mr-2 rounded bg-gray-800 border-gray-700" id="post-anonymous">
                     Post Anonymously
                 </label>
             </div>
@@ -1401,7 +1492,7 @@
             
             <div class="mb-4">
                 <label class="block text-white mb-2">Extortion Type</label>
-                <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" id="extortion-type">
                     <option>Money Demands (Dowry)</option>
                     <option>Property Transfer</option>
                     <option>High Maintenance</option>
@@ -1411,7 +1502,7 @@
             
             <div class="mb-4">
                 <label class="block text-white mb-2">Details of Demands</label>
-                <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe the demands, amounts, and how they were communicated"></textarea>
+                <textarea class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Describe the demands, amounts, and how they were communicated" id="extortion-details"></textarea>
             </div>
             
             <div class="mb-4">
@@ -1419,7 +1510,7 @@
                 <div class="card p-4 rounded-lg border-dashed border-2 border-gray-700 text-center cursor-pointer hover:border-blue-500">
                     <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
                     <p class="text-gray-400">Click to upload screenshots, recordings, legal notices</p>
-                    <input type="file" class="hidden">
+                    <input type="file" class="hidden" id="extortion-files">
                 </div>
             </div>
             
@@ -1531,6 +1622,10 @@
     </footer>
 
     <script>
+        // API Configuration
+        const MISTRAL_API_KEY = "TS5JcIJJLlaCMq2S2xoYe2ELjStoqtbV";
+        const MISTRAL_API_URL = "https://api.mistral.ai/v1/chat/completions";
+        
         // Modal controls
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'block';
@@ -1550,8 +1645,98 @@
             }
         }
         
+        // Chatbot functions
+        function openChatbot() {
+            document.getElementById('chatbotContainer').style.display = 'flex';
+        }
+        
+        function closeChatbot() {
+            document.getElementById('chatbotContainer').style.display = 'none';
+        }
+        
+        function handleChatbotKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatbotMessage();
+            }
+        }
+        
+        async function sendChatbotMessage() {
+            const input = document.getElementById('chatbotInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const messagesContainer = document.getElementById('chatbotMessages');
+            
+            // Add user message
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user-message';
+            userMessageDiv.innerHTML = `<p>${message}</p>`;
+            messagesContainer.appendChild(userMessageDiv);
+            
+            // Clear input
+            input.value = '';
+            
+            // Add typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message bot-message typing-indicator';
+            typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+            messagesContainer.appendChild(typingIndicator);
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            try {
+                // Call Mistral API
+                const response = await fetch(MISTRAL_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MISTRAL_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "mistral-large-latest",
+                        messages: [{
+                            role: "user",
+                            content: `You are a legal assistant for men's rights in India. Provide concise, helpful advice about: ${message}. 
+                            Focus on false cases like 498A, DV, maintenance, custody. Give practical steps and emotional support.`
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Remove typing indicator
+                messagesContainer.removeChild(typingIndicator);
+                
+                // Add bot response
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.className = 'message bot-message';
+                botMessageDiv.innerHTML = `<p>${data.choices[0].message.content}</p>`;
+                messagesContainer.appendChild(botMessageDiv);
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            } catch (error) {
+                console.error('Error calling Mistral API:', error);
+                
+                // Remove typing indicator
+                messagesContainer.removeChild(typingIndicator);
+                
+                // Add error message
+                const errorMessageDiv = document.createElement('div');
+                errorMessageDiv.className = 'message bot-message';
+                errorMessageDiv.innerHTML = `<p>Sorry, I'm having trouble connecting. Please try again later or use our other tools.</p>`;
+                messagesContainer.appendChild(errorMessageDiv);
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+        
         // Complaint modal steps
         let currentComplaintStep = 1;
+        let selectedComplaintType = '';
         
         function nextComplaintStep() {
             if (currentComplaintStep < 4) {
@@ -1572,6 +1757,7 @@
         }
         
         function selectComplaintType(type) {
+            selectedComplaintType = type;
             // Reset all selections
             document.querySelectorAll('#complaint-step-1 .card').forEach(card => {
                 card.classList.remove('border-blue-500', 'border');
@@ -1581,21 +1767,82 @@
             event.currentTarget.classList.add('border-blue-500', 'border');
         }
         
-        function generateComplaintDraft() {
-            // Simulate loading
+        async function generateComplaintDraft() {
             const button = event.currentTarget;
             button.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Generating...';
             button.disabled = true;
             
-            setTimeout(() => {
+            const policeStation = document.getElementById('complaint-police-station').value;
+            const caseDetails = document.getElementById('complaint-case-details').value;
+            const evidence = document.getElementById('complaint-evidence').value;
+            
+            try {
+                // Call Mistral API to generate complaint draft
+                const response = await fetch(MISTRAL_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MISTRAL_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "mistral-large-latest",
+                        messages: [{
+                            role: "user",
+                            content: `Generate a legal complaint document for ${selectedComplaintType} with these details:
+                            Police Station: ${policeStation}
+                            Case Details: ${caseDetails}
+                            Evidence: ${evidence}
+                            
+                            Format as a formal legal document with sections for:
+                            1. Header with court/police details
+                            2. Facts of the case
+                            3. Legal provisions violated
+                            4. Prayer for relief
+                            5. Supporting documents list
+                            
+                            Use formal legal language and include relevant Indian Penal Code sections.`
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                const generatedContent = data.choices[0].message.content;
+                
+                // Store the generated content for download
+                window.generatedComplaint = generatedContent;
+                
                 nextComplaintStep();
+            } catch (error) {
+                console.error('Error generating complaint:', error);
+                alert('Failed to generate complaint. Please try again.');
+            } finally {
                 button.innerHTML = 'Generate Draft <i class="fas fa-magic ml-1"></i>';
                 button.disabled = false;
-            }, 1500);
+            }
+        }
+        
+        function downloadComplaint(format) {
+            if (!window.generatedComplaint) {
+                alert('No complaint generated yet');
+                return;
+            }
+            
+            // In a real app, this would convert to PDF/DOC properly
+            const blob = new Blob([window.generatedComplaint], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `counter-complaint.${format}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
         
         // Strategy modal steps
         let currentStrategyStep = 1;
+        let selectedCaseType = '';
         
         function nextStrategyStep() {
             if (currentStrategyStep < 4) {
@@ -1603,6 +1850,11 @@
                 currentStrategyStep++;
                 document.getElementById(`strategy-step-${currentStrategyStep}`).classList.remove('hidden');
                 document.getElementById('strategy-progress').style.width = `${currentStrategyStep * 25}%`;
+                
+                // If moving to step 3, generate the strategy
+                if (currentStrategyStep === 3) {
+                    generateCaseStrategy();
+                }
             }
         }
         
@@ -1616,6 +1868,7 @@
         }
         
         function selectCaseType(type) {
+            selectedCaseType = type;
             // Reset all selections
             document.querySelectorAll('#strategy-step-1 .card').forEach(card => {
                 card.classList.remove('border-blue-500', 'border');
@@ -1625,8 +1878,125 @@
             event.currentTarget.classList.add('border-blue-500', 'border');
         }
         
+        async function generateCaseStrategy() {
+            const caseStage = document.getElementById('case-stage').value;
+            const concerns = document.getElementById('case-concerns').value;
+            const evidence = document.getElementById('case-evidence').value;
+            const outcome = document.getElementById('case-outcome').value;
+            
+            try {
+                // Call Mistral API to generate strategy
+                const response = await fetch(MISTRAL_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MISTRAL_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "mistral-large-latest",
+                        messages: [{
+                            role: "user",
+                            content: `Generate a legal strategy for a ${selectedCaseType} case in India with these details:
+                            Current Stage: ${caseStage}
+                            Main Concerns: ${concerns}
+                            Evidence Available: ${evidence}
+                            Desired Outcome: ${outcome}
+                            
+                            Provide:
+                            1. Immediate actions (next 7 days)
+                            2. Legal strategy with steps
+                            3. Settlement options
+                            4. Emotional support advice
+                            
+                            Also suggest 2 similar cases with outcomes.`
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                const generatedContent = data.choices[0].message.content;
+                
+                // Parse the response to extract strategy and similar cases
+                const strategyParts = generatedContent.split('Similar Cases:');
+                const strategyContent = strategyParts[0];
+                const similarCasesContent = strategyParts.length > 1 ? strategyParts[1] : 'No similar cases found';
+                
+                // Update the UI with the generated content
+                document.getElementById('ai-strategy-content').innerHTML = `
+                    ${formatStrategyContent(strategyContent)}
+                `;
+                
+                document.getElementById('similar-cases-content').innerHTML = `
+                    ${formatSimilarCases(similarCasesContent)}
+                `;
+                
+                // Store the generated content for download
+                window.generatedStrategy = generatedContent;
+            } catch (error) {
+                console.error('Error generating strategy:', error);
+                document.getElementById('ai-strategy-content').innerHTML = `
+                    <div class="text-red-400">
+                        Failed to generate strategy. Please try again or contact support.
+                    </div>
+                `;
+            }
+        }
+        
+        function formatStrategyContent(content) {
+            // Simple formatting for demonstration
+            return content.split('\n').map(part => {
+                if (part.match(/^\d+\./)) {
+                    return `<h5 class="font-bold text-white mb-2">${part}</h5>`;
+                } else if (part.trim()) {
+                    return `<p class="text-gray-400 mb-2">${part}</p>`;
+                }
+                return '';
+            }).join('');
+        }
+        
+        function formatSimilarCases(content) {
+            // Simple formatting for demonstration
+            return content.split('\n').map(part => {
+                if (part.match(/Case:/i)) {
+                    return `<div class="flex items-start mb-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 text-blue-400 mt-1">
+                            <i class="fas fa-gavel text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-white text-sm">${part}</p>
+                        </div>
+                    </div>`;
+                } else if (part.trim()) {
+                    return `<p class="text-gray-400 text-sm ml-11 mb-2">${part}</p>`;
+                }
+                return '';
+            }).join('');
+        }
+        
+        function downloadStrategy(format) {
+            if (!window.generatedStrategy) {
+                alert('No strategy generated yet');
+                return;
+            }
+            
+            // In a real app, this would convert to PDF/DOC properly
+            const blob = new Blob([window.generatedStrategy], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `legal-strategy.${format}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
         // Pressure tools modal
+        let selectedPressureTool = '';
+        
         function selectPressureTool(tool) {
+            selectedPressureTool = tool;
             document.getElementById('pressure-tool-content').classList.remove('hidden');
             document.getElementById('pressure-tool-result').classList.add('hidden');
             
@@ -1654,38 +2024,91 @@
             });
         }
         
-        function generatePressureTool() {
+        async function generatePressureDocument() {
             const button = event.currentTarget;
             button.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Generating...';
             button.disabled = true;
             
-            setTimeout(() => {
-                document.getElementById('pressure-tool-content').classList.add('hidden');
-                document.getElementById('pressure-tool-result').classList.remove('hidden');
+            const policeStation = document.getElementById('police-station-details').value;
+            const complaintDetails = document.getElementById('complaint-details').value;
+            
+            try {
+                let prompt = '';
+                let successMessage = '';
                 
-                // Set success message based on selected tool
-                const selectedTool = document.querySelector('#pressure-modal .card.border-blue-500 h4').textContent;
-                document.getElementById('pressure-success-message').textContent = 
-                    `Your ${selectedTool} tool is ready to download.`;
+                if (selectedPressureTool === 'rti') {
+                    prompt = `Draft an RTI application to inquire about police inaction on a complaint at ${policeStation}. 
+                    Complaint details: ${complaintDetails}. 
+                    Include sections for:
+                    1. Applicant details
+                    2. Information sought (status, action taken, reasons for delay)
+                    3. Legal provisions cited
+                    4. Submission details`;
+                    successMessage = 'Your RTI application is ready to download.';
+                } else if (selectedPressureTool === 'social') {
+                    prompt = `Create a social media post to highlight police inaction at ${policeStation} regarding: ${complimentDetails}.
+                    Make it concise (280 chars max), include relevant hashtags and official handles to tag.`;
+                    successMessage = 'Your social media post is ready to copy.';
+                } else if (selectedPressureTool === 'complaint') {
+                    prompt = `Draft a formal complaint to senior police officers about inaction at ${policeStation} regarding: ${complaintDetails}.
+                    Include:
+                    1. Chronology of events
+                    2. Evidence of inaction
+                    3. Legal provisions violated
+                    4. Requested actions`;
+                    successMessage = 'Your complaint to senior officers is ready to download.';
+                } else {
+                    prompt = `Create a media outreach template about police inaction at ${policeStation} regarding: ${complaintDetails}.
+                    Include:
+                    1. Summary of issue
+                    2. Evidence of inaction
+                    3. Human impact
+                    4. Request for coverage`;
+                    successMessage = 'Your media outreach template is ready to download.';
+                }
+                
+                // Call Mistral API
+                const response = await fetch(MISTRAL_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MISTRAL_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "mistral-large-latest",
+                        messages: [{
+                            role: "user",
+                            content: prompt
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                const generatedContent = data.choices[0].message.content;
+                
+                // Store the generated content
+                window.generatedPressureDoc = generatedContent;
+                document.getElementById('pressure-success-message').textContent = successMessage;
                 
                 // Set next steps
                 const nextStepsList = document.getElementById('pressure-next-steps');
                 nextStepsList.innerHTML = '';
                 
                 let steps = [];
-                if (selectedTool.includes('RTI')) {
+                if (selectedPressureTool === 'rti') {
                     steps = [
                         'Submit RTI at police headquarters or online at rtionline.gov.in',
                         'Keep acknowledgment receipt safe',
                         'Follow up in 30 days if no response'
                     ];
-                } else if (selectedTool.includes('Social')) {
+                } else if (selectedPressureTool === 'social') {
                     steps = [
                         'Review and edit the generated post if needed',
                         'Post at peak times (11AM or 7PM) for maximum visibility',
                         'Engage with comments and retweets'
                     ];
-                } else if (selectedTool.includes('Complaint')) {
+                } else if (selectedPressureTool === 'complaint') {
                     steps = [
                         'Print two copies of the complaint',
                         'Submit at DCP office with proof of delivery',
@@ -1693,9 +2116,9 @@
                     ];
                 } else {
                     steps = [
-                        'Review the generated document carefully',
-                        'Customize with your specific details',
-                        'Use as per your legal strategy'
+                        'Customize the template with your contact details',
+                        'Send to local journalists and news desks',
+                        'Follow up in 3-5 days if no response'
                     ];
                 }
                 
@@ -1706,53 +2129,175 @@
                     nextStepsList.appendChild(li);
                 });
                 
+                document.getElementById('pressure-tool-content').classList.add('hidden');
+                document.getElementById('pressure-tool-result').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error generating document:', error);
+                alert('Failed to generate document. Please try again.');
+            } finally {
                 button.innerHTML = 'Generate <i class="fas fa-magic ml-1"></i>';
                 button.disabled = false;
-            }, 1500);
+            }
         }
         
-        document.getElementById('generate-pressure-tool').addEventListener('click', generatePressureTool);
+        function downloadPressureDoc(format) {
+            if (!window.generatedPressureDoc) {
+                alert('No document generated yet');
+                return;
+            }
+            
+            let filename = '';
+            if (selectedPressureTool === 'rti') {
+                filename = `rti-application.${format}`;
+            } else if (selectedPressureTool === 'social') {
+                filename = `social-media-post.${format}`;
+            } else if (selectedPressureTool === 'complaint') {
+                filename = `senior-officer-complaint.${format}`;
+            } else {
+                filename = `media-outreach.${format}`;
+            }
+            
+            // In a real app, this would convert to PDF/DOC properly
+            const blob = new Blob([window.generatedPressureDoc], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
         
         // Post submission
-        function submitPost() {
+        async function submitPost() {
             const button = event.currentTarget;
             button.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Posting...';
             button.disabled = true;
             
-            setTimeout(() => {
-                closeModal('post-modal');
-                alert('Your post has been shared with the community!');
-                button.innerHTML = 'Post to Community';
-                button.disabled = false;
-            }, 1000);
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+            const caseType = document.getElementById('post-case-type').value;
+            const location = document.getElementById('post-location').value;
+            const policeStation = document.getElementById('post-police-station').value;
+            const isAnonymous = document.getElementById('post-anonymous').checked;
+            
+            try {
+                // In a real app, this would save to a database
+                // For demo, we'll just show a success message
+                
+                // Optional: Use AI to suggest tags or improve the post
+                const response = await fetch(MISTRAL_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MISTRAL_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "mistral-large-latest",
+                        messages: [{
+                            role: "user",
+                            content: `Review this community post about a legal issue and suggest 2-3 key tags:
+                            Title: ${title}
+                            Content: ${content}
+                            
+                            Only respond with comma-separated tags relevant to Indian men's legal rights issues.`
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                const suggestedTags = data.choices[0].message.content;
+                
+                setTimeout(() => {
+                    closeModal('post-modal');
+                    alert(`Your post has been shared with the community!\n\nSuggested tags: ${suggestedTags}`);
+                    button.innerHTML = 'Post to Community';
+                    button.disabled = false;
+                }, 1000);
+            } catch (error) {
+                console.error('Error submitting post:', error);
+                setTimeout(() => {
+                    closeModal('post-modal');
+                    alert('Your post has been shared with the community!');
+                    button.innerHTML = 'Post to Community';
+                    button.disabled = false;
+                }, 1000);
+            }
         }
         
         // AI tips
-        function showAITip(type) {
+        async function showAITip(type) {
+            let prompt = '';
             let title = '';
-            let content = '';
             
             switch(type) {
                 case 'stress':
                     title = 'Stress Management Tips';
-                    content = '1. Practice deep breathing (4-7-8 technique)\n2. Take regular breaks from case work\n3. Maintain a gratitude journal\n4. Try progressive muscle relaxation\n5. Set aside "worry time" to limit anxiety';
+                    prompt = 'Provide 5 practical stress management techniques for men dealing with false legal cases in India. Keep each tip to 1 sentence.';
                     break;
                 case 'sleep':
                     title = 'Sleep Better Tips';
-                    content = '1. Maintain consistent sleep schedule\n2. Avoid screens 1 hour before bed\n3. Try guided sleep meditations\n4. Keep a notepad by bed for racing thoughts\n5. Limit caffeine after 2PM';
+                    prompt = 'Provide 5 practical tips for men to sleep better while dealing with legal stress in India. Keep each tip to 1 sentence.';
                     break;
                 case 'anger':
                     title = 'Managing Anger Tips';
-                    content = '1. Recognize early warning signs\n2. Use timeout technique when upset\n3. Channel energy into exercise\n4. Practice cognitive reframing\n5. Express feelings through writing';
+                    prompt = 'Provide 5 healthy ways for men to manage anger during false legal cases in India. Keep each tip to 1 sentence.';
                     break;
             }
             
-            alert(`${title}:\n\n${content}`);
-        }
-        
-        // Chatbot
-        function openChatbot() {
-            alert('LegalBot: Hello! How can I help you today?\n\n1. File a counter complaint\n2. Understand my case options\n3. Find emotional support\n4. Connect with legal help\n\nReply with the number or ask your question.');
+            try {
+                const response = await fetch(MISTRAL_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MISTRAL_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "mistral-large-latest",
+                        messages: [{
+                            role: "user",
+                            content: prompt
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                const tips = data.choices[0].message.content;
+                
+                alert(`${title}:\n\n${tips}`);
+            } catch (error) {
+                console.error('Error getting AI tips:', error);
+                
+                // Fallback tips
+                const fallbackTips = {
+                    'stress': [
+                        '1. Practice deep breathing exercises daily',
+                        '2. Take short walks to clear your mind',
+                        '3. Talk to a trusted friend about your feelings',
+                        '4. Limit news consumption about your case',
+                        '5. Try progressive muscle relaxation before bed'
+                    ].join('\n'),
+                    'sleep': [
+                        '1. Maintain a consistent sleep schedule',
+                        '2. Avoid screens 1 hour before bedtime',
+                        '3. Try guided sleep meditations',
+                        '4. Keep a notepad by bed for racing thoughts',
+                        '5. Limit caffeine after 2PM'
+                    ].join('\n'),
+                    'anger': [
+                        '1. Recognize early signs of anger building',
+                        '2. Use the 5-5-5 breathing technique when upset',
+                        '3. Channel energy into physical exercise',
+                        '4. Practice cognitive reframing of situations',
+                        '5. Express feelings through journaling'
+                    ].join('\n')
+                };
+                
+                alert(`${title}:\n\n${fallbackTips[type]}`);
+            }
         }
         
         // Switch tabs in community hub
